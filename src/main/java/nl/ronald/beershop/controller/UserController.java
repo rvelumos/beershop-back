@@ -4,21 +4,17 @@ import nl.ronald.beershop.exception.BadRequestException;
 import nl.ronald.beershop.model.Authority;
 import nl.ronald.beershop.model.User;
 import nl.ronald.beershop.repository.AuthorityRepository;
-import nl.ronald.beershop.repository.ProductRepository;
 import nl.ronald.beershop.repository.UserRepository;
 import nl.ronald.beershop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
-import java.util.Map;
+
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -47,20 +43,13 @@ public class UserController {
         return ResponseEntity.ok().body(userService.getUser(username));
     }
 
-
-//    @GetMapping(value = "/{user_id}")
-//    public ResponseEntity<Object> getUserRoles(@PathVariable("user_id") long user_id) {
-//        List<User> user = userRepository.getUserRoles(user_id);
-//        return new ResponseEntity<>(user, HttpStatus.OK);
-//    }
-
     @PutMapping(value = "/users/{username}")
     public ResponseEntity<Object> updateUser(@PathVariable("username") String username, @RequestBody User user) {
         userService.updateUser(username, user);
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping(value = "/users/{username}")
+    @DeleteMapping(value = "/admin/users/{username}")
     public ResponseEntity<Object> deleteUser(@PathVariable("username") String username) {
         userService.deleteUser(username);
         return ResponseEntity.noContent().build();
@@ -72,7 +61,6 @@ public class UserController {
     }
 
     @PostMapping(value = "/create_authority")
-//    @PostMapping(value = "/{username}/authorities")
     public ResponseEntity<Object> createUserAuthority(@RequestBody Authority authority) {
         authorityRepository.save(authority);
         URI location;
@@ -88,7 +76,7 @@ public class UserController {
 //        }
     }
 
-    @PostMapping(value = "/create_user")
+    @RequestMapping(value = {"/create_user", "/admin/create_user"}, method = POST)
     public ResponseEntity<Object> createUser(@RequestBody User user) {
         String password = user.getPassword();
         user.setPassword(passwordEncoder.encode(password));

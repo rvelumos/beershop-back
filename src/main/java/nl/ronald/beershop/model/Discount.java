@@ -23,6 +23,9 @@ public class Discount {
     @Column(name = "customer_id")
     private long customerId;
 
+    @Column(name = "product_id")
+    private long productId;
+
     @Column
     private String name;
 

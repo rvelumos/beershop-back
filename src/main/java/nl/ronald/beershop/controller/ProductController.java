@@ -1,8 +1,8 @@
 package nl.ronald.beershop.controller;
 
-import lombok.Data;
 import nl.ronald.beershop.model.Product;
 import nl.ronald.beershop.repository.ProductRepository;
+import nl.ronald.beershop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +20,12 @@ public class ProductController {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    ProductService productService;
+
     @GetMapping(value="/products/type/{type}/latest/")
     public ResponseEntity<Object> getLatestProducts(@PathVariable("type") long type) {
-        List<Product> products = productRepository.findTop5ByTypeOrderByStockAsc(type);
+        List<Product> products = productRepository.findTop3ByTypeOrderByStockAsc(type);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
@@ -32,19 +35,18 @@ public class ProductController {
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    //everything
     @GetMapping(value = "/products/all/")
     public ResponseEntity<Object> getProducts() {
         List<Product> products = productRepository.findAll();
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    // check bonus products
-    @GetMapping(value = "/products/type/{type}/")
-    public ResponseEntity<Object> getProducts(@PathVariable("type") long type) {
-        List<Product> products = productRepository.findAllProductsByType(type);
-        return new ResponseEntity<>(products, HttpStatus.OK);
-    }
+//    // check bonus products
+//    @GetMapping(value = "/products/type/{type}/")
+//    public ResponseEntity<Object> getProducts(@PathVariable("type") long type) {
+//        List<Product> products = productRepository.findAllProductsByType(type);
+//        return new ResponseEntity<>(products, HttpStatus.OK);
+//    }
 
     @GetMapping(value = "/products/discount/")
     public ResponseEntity<Object> getDiscountProducts(Product product) {
@@ -58,16 +60,16 @@ public class ProductController {
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    @RequestMapping(value="/products/")
+    @RequestMapping(value="/products/type/{type}")
     @ResponseBody
     public ResponseEntity<Object> filterProducts(
-            @RequestParam Optional<Long> price,
-            @RequestParam Optional<Long> category_id,
-            @RequestParam Optional<String> taste,
-            @RequestParam Optional<String> name,
-            @RequestParam Optional<Long> manufacturer_id) {
+            @PathVariable("type") long type,
+            @RequestParam (name="price", defaultValue = "") Optional<String> price,
+            @RequestParam (name="category_id", defaultValue = "") Optional<String> category_id,
+            @RequestParam (name="taste", defaultValue = "")Optional<String> taste,
+            @RequestParam (name="name", defaultValue = "")Optional<String> name) {
 
-            List<Product> products = productRepository.findProductByFilterValues(price, category_id, taste, name, manufacturer_id);
+            List<Product> products = productService.findProductByFilterValues(type, price, category_id, taste, name);
 
             return new ResponseEntity<>(products, HttpStatus.OK);
     }
@@ -113,7 +115,7 @@ public class ProductController {
     }
 
     //auth check
-    @PostMapping(value="/product")
+    @PostMapping(value="/admin/product")
     public ResponseEntity<Object> createProduct(@RequestBody Product product) {
         productRepository.save(product);
         URI location;
@@ -121,7 +123,7 @@ public class ProductController {
     }
 
     //auth check
-    @DeleteMapping("/product/{id}")
+    @DeleteMapping("/admin/product/{id}")
     public ResponseEntity<Object> deleteProduct(@PathVariable("id") long id) {
         productRepository.deleteById(id);
         return new ResponseEntity<>("Product is verwijderd", HttpStatus.OK);

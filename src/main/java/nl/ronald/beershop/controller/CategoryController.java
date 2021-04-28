@@ -30,7 +30,6 @@ public class CategoryController {
         return new ResponseEntity<>(category, HttpStatus.OK);
     }
 
-    //auth fix!
     @PostMapping(value="/admin/products/category")
     public ResponseEntity<Object> createCategory(@RequestBody Category category) {
         categoryRepository.save(category);
@@ -50,7 +49,6 @@ public class CategoryController {
             });
     }
 
-    //auth fix!
     @DeleteMapping("/admin/products/category/{id}")
     public ResponseEntity<Object> deleteCategory(@PathVariable("id") long id) {
         categoryRepository.deleteById(id);

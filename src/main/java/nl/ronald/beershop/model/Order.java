@@ -44,7 +44,7 @@ public class Order {
     private Date order_sent;
 
     @Column
-    private Long price_total;
+    private double price_total;
 
     @Enumerated(EnumType.STRING)
     private Order_status order_status;
