@@ -3,7 +3,7 @@ package nl.ronald.beershop.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.util.Set;
 
 @Data
 @Entity
@@ -13,11 +13,22 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "category_id")
-    private long categoryId;
+    @ManyToOne
+    @JoinColumn(name="category_id", referencedColumnName = "id")
+    private Category category;
 
-    @Column
-    private long manufacturer_id;
+    @ManyToOne
+    @JoinColumn(name="manufacturer_id", referencedColumnName = "id")
+    private Manufacturer manufacturer;
+
+    @ManyToMany(mappedBy = "Product")
+    Set<Order> Order;
+
+    @Column(name="category_id", insertable = false, updatable = false)
+    private long categoryId;
+//
+//    @Column(name="manufacturer_id")
+//    private long manufacturerId;
 
     @Column
     private String name;
@@ -39,11 +50,5 @@ public class Product {
 
     @Column
     private String discount;
-
-    @Column
-    private Date created_at;
-
-    @Column
-    private Date updated_at;
 
 }

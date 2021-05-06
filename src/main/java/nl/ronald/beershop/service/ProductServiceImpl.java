@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import nl.ronald.beershop.service.ProductSpecification.*;
+import static org.springframework.data.jpa.domain.Specification.where;
+
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -57,20 +60,21 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> findProductByFilterValues(long type,
                                                    Optional<String> price,
                                                    Optional<String> category_id,
-                                                   Optional<String> taste,
-                                                   Optional<String> name
+                                                   Optional<String> taste
                                                    ) {
 
-//        List<String> categories = new ArrayList<>();
-//        if (category_id.isPresent() && !category_id.get().isEmpty()) {
-//            for (String g: category_id.get().split(",")) {
-//                categories.add(g.toLowerCase().trim());
-//            }
-//        }
+
         List<Long> categories = new ArrayList<>();
         if (category_id.isPresent() && !category_id.get().isEmpty()) {
             for (String c : category_id.get().split(",")) {
                 categories.add(Long.parseLong(c.trim()));
+            }
+        }
+
+        List<Long> tastes = new ArrayList<>();
+        if (taste.isPresent() && !taste.get().isEmpty()) {
+            for (String t : taste.get().split(",")) {
+                tastes.add(Long.parseLong(t.trim()));
             }
         }
 
@@ -85,6 +89,13 @@ public class ProductServiceImpl implements ProductService {
 //                taste.orElse("").toLowerCase().trim(),
 //                name.orElse("").toLowerCase().trim(),
                 categories);
+
+
+//        return productRepository.findAll(
+//                where(withPrice(price.orElse(null)))
+//                .and(withCategories(categories))
+//                .and(withTastes(tastes))
+//        );
     }
 
 

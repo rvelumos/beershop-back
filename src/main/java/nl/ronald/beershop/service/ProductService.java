@@ -16,7 +16,6 @@ public interface ProductService {
             long type,
             Optional<String> price,
             Optional<String> category_id,
-            Optional<String> taste,
-            Optional<String> name
+            Optional<String> taste
             );
 }

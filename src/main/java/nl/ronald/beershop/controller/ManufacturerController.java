@@ -31,14 +31,12 @@ public class ManufacturerController {
         return new ResponseEntity<>("Fabrikant toegevoegd", HttpStatus.CREATED);
     }
 
-    //auth fix!
     @GetMapping(value="/manufacturer/{id}")
     public ResponseEntity<Object> getManufacturer(@PathVariable("id") long id) {
         Optional<Manufacturer> manufacturer = manufacturerRepository.findById(id);
         return new ResponseEntity<>(manufacturer, HttpStatus.OK);
     }
 
-    // auth fix & related authorities fix
     @PutMapping(value = "/admin/manufacturer/{id}")
     public Manufacturer updateManufacturer(@RequestBody Manufacturer manufacturer, @PathVariable Long id) {
         return manufacturerRepository.findById(id)
@@ -54,8 +52,7 @@ public class ManufacturerController {
             });
     }
 
-    //auth fix!
-    @DeleteMapping("/manufacturer/{id}")
+    @DeleteMapping("/admin/manufacturer/{id}")
     public ResponseEntity<Object> deleteManufacturer(@PathVariable("id") long id) {
         manufacturerRepository.deleteById(id);
         return new ResponseEntity<>("Fabrikant verwijderd", HttpStatus.OK);

@@ -53,11 +53,10 @@ public class CustomerController {
             .map(updateCustomer -> {
                 updateCustomer.setFirstname(customer.getFirstname());
                 updateCustomer.setLastname(customer.getLastname());
-                updateCustomer.setAddress(customer.getAddress());
                 updateCustomer.setEmail(customer.getEmail());
-                updateCustomer.setBirth_date(customer.getBirth_date());
+                updateCustomer.setBirthDate(customer.getBirthDate());
                 updateCustomer.setPhone(customer.getPhone());
-                updateCustomer.setCustomer_points(customer.getCustomer_points());
+                updateCustomer.setCustomerPoints(customer.getCustomerPoints());
                 updateCustomer.setNewsletter(customer.isNewsletter());
                 updateCustomer.setSex(customer.getSex());
 

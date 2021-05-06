@@ -1,21 +1,23 @@
 package nl.ronald.beershop.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Data
 @Entity
 @Table(name = "orders")
 public class Order {
 
-    public enum Invoice_status {
+    public enum InvoiceStatus {
         PAID,
         UNPAID
     }
 
-    public enum Order_status {
+    public enum OrderStatus {
         NEW_ADDED,
         PROCESSING,
         SENT,
@@ -27,29 +29,34 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    //@ManyToOne
-   // @JoinColumn(name = "customer")
-    //private Customer customer;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "shipping_id", referencedColumnName = "id")
+    private Shipping shipping;
+
+    @ManyToOne
+    @JoinColumn(name = "customer")
+    private Customer customer;
 
     @Column(name="customer_id")
     private long customerId;
 
-    @Column
-    private long shipping_id;
+    @ManyToMany
+    Set<Product> Product;
 
-    @Column
-    private Date order_date;
+    @JsonFormat(pattern="dd-MM-yyyy")
+    @Column(name="order_date")
+    private Date orderDate;
 
-    @Column
-    private Date order_sent;
+    @JsonFormat(pattern="dd-MM-yyyy")
+    @Column(name="order_sent")
+    private Date orderSent;
 
-    @Column
-    private double price_total;
+    @Column(name="price_total")
+    private double priceTotal;
 
     @Enumerated(EnumType.STRING)
-    private Order_status order_status;
+    private OrderStatus orderStatus;
 
     @Enumerated(EnumType.STRING)
-    private Invoice_status invoice_status;
-
+    private InvoiceStatus invoiceStatus;
 }

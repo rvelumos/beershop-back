@@ -1,7 +1,11 @@
 package nl.ronald.beershop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -16,17 +20,20 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-   // @OneToMany(mappedBy = "orders")
+    //@OneToMany(mappedBy = "orders")
     //private List<Order> order = new ArrayList<>();
 
-    //@OneToMany(mappedBy="customer")
-    //private Set<Order> Orders;
+//    @OneToMany(mappedBy="customer")
+//    private Set<Discount> Discounts;
+//
+//    @OneToMany(mappedBy="customer")
+//    private Set<Order> Orders;
 
     @Enumerated(EnumType.STRING)
     private sex sex;
 
-    @Column
-    private long user_id;
+    @Column(name="user_id")
+    private long userId;
 
     @Column
     private String firstname;
@@ -37,8 +44,8 @@ public class Customer {
     @Column
     private String email;
 
-    @Column
-    private String birth_date;
+    @Column(name="birth_date")
+    private String birthDate;
 
     @Column
     private boolean newsletter;
@@ -46,10 +53,15 @@ public class Customer {
     @Column
     private String phone;
 
-    @Column
-    private String address;
+//    @ManyToOne
+//    @JoinColumn(name = "address_id")
+//    private Customer customer;
 
-    @Column
-    private String customer_points;
+    @OneToOne(mappedBy = "customer")
+    @JsonIgnore
+    private Address address;
+
+    @Column(name="customer_points")
+    private String customerPoints;
 
 }

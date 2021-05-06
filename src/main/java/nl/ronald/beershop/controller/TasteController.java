@@ -30,7 +30,6 @@ public class TasteController {
         return new ResponseEntity<>(taste, HttpStatus.OK);
     }
 
-    //auth fix!
     @PostMapping(value="/admin/products/taste")
     public ResponseEntity<Object> createTaste(@RequestBody Taste taste) {
         tasteRepository.save(taste);

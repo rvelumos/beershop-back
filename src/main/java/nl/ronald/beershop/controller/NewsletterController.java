@@ -18,7 +18,7 @@ public class NewsletterController {
     @Autowired
     private NewsletterRepository newsletterRepository;
 
-    @GetMapping("/newsletters")
+    @GetMapping(value="/newsletters")
     public ResponseEntity<Object> getNewsletters() {
         List<Newsletter> newsletter = newsletterRepository.findAll();
         return new ResponseEntity<>(newsletter, HttpStatus.OK);
@@ -31,14 +31,13 @@ public class NewsletterController {
         return new ResponseEntity<>("Nieuwsbrief toegevoegd", HttpStatus.CREATED);
     }
 
-    //auth fix!
     @GetMapping(value="/newsletter/{id}")
     public ResponseEntity<Object> getNewsletter(@PathVariable("id") long id) {
         Optional<Newsletter> newsletter = newsletterRepository.findById(id);
         return new ResponseEntity<>(newsletter, HttpStatus.OK);
     }
 
-    @DeleteMapping("/newsletter/{id}")
+    @DeleteMapping(value="/newsletter/{id}")
     public ResponseEntity<Object> deleteNewsletter(@PathVariable("id") long id) {
         newsletterRepository.deleteById(id);
         return new ResponseEntity<>("Nieuwsbrief verwijderd", HttpStatus.OK);

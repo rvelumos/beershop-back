@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Random;
+import java.util.Set;
 
 @Data
 @Entity
@@ -25,6 +26,14 @@ public class Discount {
 
     @Column(name = "product_id")
     private long productId;
+
+//    @ManyToOne
+//    @JoinColumn(name="customer_id", nullable=false)
+//    private Customer customer;
+
+//    @OneToMany(mappedBy="discount")
+//    private Set<Product> product;
+
 
     @Column
     private String name;

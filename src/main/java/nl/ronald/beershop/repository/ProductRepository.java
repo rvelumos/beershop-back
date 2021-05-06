@@ -2,6 +2,7 @@ package nl.ronald.beershop.repository;
 
 import nl.ronald.beershop.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
 import java.util.Optional;
 
-public interface ProductRepository extends JpaRepository<Product, Long> {
+public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
 
     //List<Product> findAllById(Long id);
     List<Product> findByNameIgnoreCaseContaining(String name);
@@ -18,6 +19,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findAllByDiscountNotNull();
     List<Product> findTop5ByCategoryId(Long category_id);
     List<Product> findAllByTypeNotContaining(Long type);
+
 
 //    @Query( value = "SELECT * from Product p WHERE (:name is null or lower(p.name) LIKE %:name%) " +
 //            "AND (p.price = :price or :price = -1) " +

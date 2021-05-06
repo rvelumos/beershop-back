@@ -38,7 +38,7 @@ public class UserController {
         return ResponseEntity.ok().body(userService.getUsers());
     }
 
-    @GetMapping(value = "/users/{username}")
+    @GetMapping(value = "/user/{username}")
     public ResponseEntity<Object> getUser(@PathVariable("username") String username) {
         return ResponseEntity.ok().body(userService.getUser(username));
     }
@@ -49,7 +49,7 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping(value = "/admin/users/{username}")
+    @DeleteMapping(value = "/admin/user/{username}")
     public ResponseEntity<Object> deleteUser(@PathVariable("username") String username) {
         userService.deleteUser(username);
         return ResponseEntity.noContent().build();
@@ -65,15 +65,6 @@ public class UserController {
         authorityRepository.save(authority);
         URI location;
         return new ResponseEntity<>("Rol is toegevoegd", HttpStatus.CREATED);
-
-//        try {
-//            String authorityName = (String) fields.get("authority");
-//            userService.addAuthority(username, authorityName);
-//            return ResponseEntity.noContent().build();
-//        }
-//        catch (Exception ex) {
-//            throw new BadRequestException();
-//        }
     }
 
     @RequestMapping(value = {"/create_user", "/admin/create_user"}, method = POST)
@@ -90,46 +81,4 @@ public class UserController {
         userService.removeAuthority(username, authority);
         return ResponseEntity.noContent().build();
     }
-
-
-    // auth fix
-//    @GetMapping(value = "/api/v1/userprofiles")
-//    public ResponseEntity<Object> getUsers() {
-//        List<User> users = userRepository.findAll();
-//        return new ResponseEntity<>(users, HttpStatus.OK);
-//    }
-//
-//    //auth fix!/1
-//    @GetMapping(value = "/api/v1/userprofile/{username}")
-//    public ResponseEntity<Object> getUser(@PathVariable("username") String username) {
-//        Optional<User> user = userRepository.findById(username);
-//        return new ResponseEntity<>(user, HttpStatus.OK);
-//    }
-//
-
-
-//
-//    // auth fix & related authorities fix
-//    @PutMapping(value = "/api/v1/admin/userprofile/{id}")
-//    public User updateUser(@RequestBody User user, @PathVariable Long id) {
-//        return userRepository.findById(id)
-//        .map(updateUser -> {
-//            updateUser.setUsername(user.getUsername());
-//            updateUser.setExpiration_date(user.getExpiration_date());
-//            updateUser.setPassword(passwordEncoder.encode(user.getPassword()));
-//            return userRepository.save(updateUser);
-//        })
-//        .orElseGet(() -> {
-//            return userRepository.save(user);
-//        });
-//    }
-//
-//    // auth fix
-//    @DeleteMapping("/api/v1/admin/userprofile/{id}")
-//    public ResponseEntity<Object> deleteUser(@PathVariable("id") long id) {
-//        userRepository.deleteById(id);
-//        return new ResponseEntity<>("Gebruiker is verwijderd", HttpStatus.OK);
-//    }
-
-
 }

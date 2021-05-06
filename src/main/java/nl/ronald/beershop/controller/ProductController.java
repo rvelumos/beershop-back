@@ -23,32 +23,25 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
-    @GetMapping(value="/products/type/{type}/latest/")
+    @GetMapping(value="/products/type/{type}/latest")
     public ResponseEntity<Object> getLatestProducts(@PathVariable("type") long type) {
         List<Product> products = productRepository.findTop3ByTypeOrderByStockAsc(type);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/recommended/{category_id}/")
+    @GetMapping(value = "/products/recommended/{category_id}")
     public ResponseEntity<Object> recommendedProducts(@PathVariable("category_id") long category_id) {
         List<Product> products = productRepository.findTop5ByCategoryId(category_id);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/products/all/")
+    @GetMapping(value = "/products")
     public ResponseEntity<Object> getProducts() {
         List<Product> products = productRepository.findAll();
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-//    // check bonus products
-//    @GetMapping(value = "/products/type/{type}/")
-//    public ResponseEntity<Object> getProducts(@PathVariable("type") long type) {
-//        List<Product> products = productRepository.findAllProductsByType(type);
-//        return new ResponseEntity<>(products, HttpStatus.OK);
-//    }
-
-    @GetMapping(value = "/products/discount/")
+    @GetMapping(value = "/products/discount")
     public ResponseEntity<Object> getDiscountProducts(Product product) {
         List<Product> products = productRepository.findAllByDiscountNotNull();
         return new ResponseEntity<>(products, HttpStatus.OK);
@@ -66,21 +59,19 @@ public class ProductController {
             @PathVariable("type") long type,
             @RequestParam (name="price", defaultValue = "") Optional<String> price,
             @RequestParam (name="category_id", defaultValue = "") Optional<String> category_id,
-            @RequestParam (name="taste", defaultValue = "")Optional<String> taste,
-            @RequestParam (name="name", defaultValue = "")Optional<String> name) {
+            @RequestParam (name="taste", defaultValue = "")Optional<String> taste) {
 
-            List<Product> products = productService.findProductByFilterValues(type, price, category_id, taste, name);
+            List<Product> products = productService.findProductByFilterValues(type, price, category_id, taste);
 
             return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    // auth check & related authorities fix
     @PutMapping(value = "/admin/product/{id}")
     public Product updateProduct(@RequestBody Product product, @PathVariable Long id) {
         return productRepository.findById(id)
             .map(updateProduct -> {
                 updateProduct.setCategoryId(product.getCategoryId());
-                updateProduct.setManufacturer_id(product.getManufacturer_id());
+                updateProduct.setManufacturer(product.getManufacturer());
                 updateProduct.setName(product.getName());
                 updateProduct.setPrice(product.getPrice());
                 updateProduct.setTaste(product.getTaste());
@@ -94,7 +85,6 @@ public class ProductController {
             });
     }
 
-    // auth check
     public Product updateProductStock(@RequestBody Product product, @PathVariable Long id) {
         return productRepository.findById(id)
             .map(updateProduct -> {
@@ -106,7 +96,6 @@ public class ProductController {
             });
     }
 
-    //auth & order join fix
     @CrossOrigin
     @GetMapping(value = "/product/{id}")
     public ResponseEntity<Object> getProduct(@PathVariable("id") long id) {
@@ -114,7 +103,6 @@ public class ProductController {
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
-    //auth check
     @PostMapping(value="/admin/product")
     public ResponseEntity<Object> createProduct(@RequestBody Product product) {
         productRepository.save(product);
@@ -122,7 +110,6 @@ public class ProductController {
         return new ResponseEntity<>("Toegevoegd", HttpStatus.CREATED);
     }
 
-    //auth check
     @DeleteMapping("/admin/product/{id}")
     public ResponseEntity<Object> deleteProduct(@PathVariable("id") long id) {
         productRepository.deleteById(id);

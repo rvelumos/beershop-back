@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
-import static nl.ronald.beershop.model.Order.Invoice_status.UNPAID;
-import static nl.ronald.beershop.model.Order.Order_status.NEW_ADDED;
+import static nl.ronald.beershop.model.Order.InvoiceStatus.UNPAID;
+import static nl.ronald.beershop.model.Order.OrderStatus.NEW_ADDED;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -33,28 +33,26 @@ public class OrderController {
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
-    //user auth fix & email verification
-    @PostMapping(value = "/order")
+    @RequestMapping(value = "/admin/order/create", method = RequestMethod.POST)
     public ResponseEntity<Object> createOrder(@RequestBody Order order) {
-        order.setInvoice_status(UNPAID);
-        order.setOrder_status(NEW_ADDED);
+        order.setInvoiceStatus(UNPAID);
+        order.setOrderStatus(NEW_ADDED);
         orderRepository.save(order);
         //getJavaMailSender().send();
         URI location;
         return new ResponseEntity<>("Toegevoegd", HttpStatus.CREATED);
     }
 
-    @PutMapping(value = "/order/{id}")
+    @PutMapping(value = "/admin/order/{id}")
     public Order updateOrder(@RequestBody Order order, @PathVariable Long id) {
         return orderRepository.findById(id)
                 .map(updateOrder -> {
-                    updateOrder.setInvoice_status(order.getInvoice_status());
-                    updateOrder.setOrder_status(order.getOrder_status());
+                    updateOrder.setInvoiceStatus(order.getInvoiceStatus());
+                    updateOrder.setOrderStatus(order.getOrderStatus());
                     updateOrder.setCustomerId(order.getCustomerId());
-                    updateOrder.setOrder_date(order.getOrder_date());
-                    updateOrder.setOrder_sent(order.getOrder_sent());
-                    updateOrder.setPrice_total(order.getPrice_total());
-                    updateOrder.setShipping_id(order.getShipping_id());
+                    updateOrder.setOrderDate(order.getOrderDate());
+                    updateOrder.setOrderSent(order.getOrderSent());
+                    updateOrder.setPriceTotal(order.getPriceTotal());
 
                     return orderRepository.save(updateOrder);
                 })
@@ -63,40 +61,18 @@ public class OrderController {
                 });
     }
 
-    //check email
-    @Bean
-    public JavaMailSender getJavaMailSender() {
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("smtp.gmail.com");
-        mailSender.setPort(587);
-
-        mailSender.setUsername("ronald.eijsden@gmail.com");
-        mailSender.setPassword("ss");
-
-        Properties props = mailSender.getJavaMailProperties();
-        props.put("mail.transport.protocol", "smtp");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.debug", "true");
-
-        return mailSender;
-    }
-
-    //auth fix!
     @GetMapping(value = "/order/{id}")
     public ResponseEntity<Object> getOrder(@PathVariable("id") long id) {
         Optional<Order> order = orderRepository.findById(id);
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
-    //auth fix!
-    @GetMapping(value = "/orders/customer/{customer_id}")
-    public ResponseEntity<Object> getCustomerOrders(@PathVariable("customer_id") long customer_id) {
-        List<Order> customerOrders = orderRepository.findByCustomerId(customer_id);
+    @GetMapping(value = "/orders/customer/{customerId}")
+    public ResponseEntity<Object> getCustomerOrders(@PathVariable("customerId") long customerId) {
+        List<Order> customerOrders = orderRepository.findByCustomerId(customerId);
         return new ResponseEntity<>(customerOrders, HttpStatus.OK);
     }
 
-    //auth fix & cascade Customer order_ID
     @DeleteMapping(value = "/order/{id}")
     public ResponseEntity<Object> deleteOrder(@PathVariable("user_id") long id) {
         orderRepository.deleteById(id);

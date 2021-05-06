@@ -18,13 +18,19 @@ public class DiscountController {
     @Autowired
     private DiscountRepository discountRepository;
 
+    @GetMapping(value="/products/giftcards/{code}")
+    public ResponseEntity<Object> getGiftcardCode(@PathVariable("code") String code) {
+        List<Discount> discounts = discountRepository.findByCode(code);
+        return new ResponseEntity<>(discounts, HttpStatus.OK);
+    }
+
     @GetMapping(value="/admin/products/discounts")
     public ResponseEntity<Object> getDiscounts() {
         List<Discount> discounts = discountRepository.findAll();
         return new ResponseEntity<>(discounts, HttpStatus.OK);
     }
 
-    @PostMapping(value="/admin/products/discounts")
+    @PostMapping(value="/admin/products/discount")
     public ResponseEntity<Object> createDiscount(@RequestBody Discount discount) {
         String discount_type=discount.getDiscount_type().toString();
         discount.setCode(discount.randomCodeGenerator(discount_type));
@@ -33,19 +39,19 @@ public class DiscountController {
         return new ResponseEntity<>("Toegevoegd", HttpStatus.CREATED);
     }
 
-    @GetMapping(value="/admin/products/discounts/{id}")
+    @GetMapping(value="/admin/products/discount/{id}")
     public ResponseEntity<Object> getDiscount(@PathVariable("id") long id) {
         Optional<Discount> discounts = discountRepository.findById(id);
         return new ResponseEntity<>(discounts, HttpStatus.OK);
     }
 
-    @GetMapping(value="/admin/giftcards/{product_id}")
+    @GetMapping(value="/admin/products/giftcards/{product_id}")
     public ResponseEntity<Object> getGiftcardUsages(@PathVariable("product_id") long product_id) {
         List<Discount> discounts = discountRepository.findByProductId(product_id);
         return new ResponseEntity<>(discounts, HttpStatus.OK);
     }
 
-    @GetMapping(value="/giftcards/customer/{customer_id}")
+    @GetMapping(value="/products/giftcards/customer/{customer_id}")
     public ResponseEntity<Object> getUserGiftCards(@PathVariable("customer_id") long customer_id) {
         List<Discount> giftcards = discountRepository.findByCustomerIdAndName(customer_id, "Cadeaubon");
         return new ResponseEntity<>(giftcards, HttpStatus.OK);

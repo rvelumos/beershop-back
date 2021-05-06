@@ -20,14 +20,12 @@ public class ShippingController {
     @Autowired
     private ShippingRepository shippingRepository;
 
-
     @GetMapping(value = "/shippings")
     public ResponseEntity<Object> getShippings() {
         List<Shipping> shippings = shippingRepository.findAll();
         return new ResponseEntity<>(shippings, HttpStatus.OK);
     }
 
-    //auth fix!/1
     @GetMapping(value = "/shipping/{id}")
     public ResponseEntity<Object> getShipping(@PathVariable("id") long id) {
         Optional<Shipping> shipping = shippingRepository.findById(id);
@@ -45,16 +43,8 @@ public class ShippingController {
     public Shipping updateShipping(@RequestBody Shipping shipping, @PathVariable Long id) {
         return shippingRepository.findById(id)
                 .map(updateShipping -> {
-                    updateShipping.setNumber(shipping.getNumber());
-                    updateShipping.setCity(shipping.getCity());
-                    updateShipping.setCustomer_name(shipping.getCustomer_name());
-                    updateShipping.setOrder_id(shipping.getOrder_id());
-                    updateShipping.setAddress_type(shipping.getAddress_type());
-                    updateShipping.setStreet(shipping.getStreet());
-                    updateShipping.setStreet_add(shipping.getStreet_add());
-                    updateShipping.setCity(shipping.getCity());
-                    updateShipping.setPostal_code(shipping.getPostal_code());
-                    updateShipping.setCountry(shipping.getCountry());
+                    updateShipping.setOrderId(shipping.getOrderId());
+                    updateShipping.setAddress(shipping.getAddress());
                     return shippingRepository.save(updateShipping);
                 })
                 .orElseGet(() -> {

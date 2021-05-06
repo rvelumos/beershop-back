@@ -19,9 +19,6 @@ public class User {
     @Column(nullable = false, length = 255)
     private String password;
 
-//    @Column(nullable = false)
-//    private boolean enabled = true;
-
     @Column
     private String apikey;
 
@@ -39,9 +36,6 @@ public class User {
             fetch = FetchType.EAGER)
     private Set<nl.ronald.beershop.model.Authority> authorities = new HashSet<>();
 
-//    public boolean isEnabled() { return enabled;}
-//    public void setEnabled(boolean enabled) { this.enabled = enabled; }
-
     public Set<Authority> getAuthorities() { return authorities; }
     public void addAuthority(Authority authority) {
         this.authorities.add(authority);
@@ -49,5 +43,4 @@ public class User {
     public void removeAuthority(Authority authority) {
         this.authorities.remove(authority);
     }
-
 }

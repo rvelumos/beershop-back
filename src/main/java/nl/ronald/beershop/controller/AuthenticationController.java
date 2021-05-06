@@ -28,12 +28,12 @@ public class AuthenticationController {
     @Autowired
     JwtUtil jwtUtl;
 
-    @GetMapping(value = "/authenticated")
+    @GetMapping(value = "/api/v1/authenticated")
     public ResponseEntity<Object> authenticated(Authentication authentication, Principal principal) {
         return ResponseEntity.ok().body(principal);
     }
 
-    @PostMapping(value = "/authenticate")
+    @PostMapping(value = "/api/v1/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
 
         String username = authenticationRequest.getUsername();

@@ -1,8 +1,10 @@
 package nl.ronald.beershop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Data
 @Entity
@@ -12,34 +14,18 @@ public class Shipping {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column
-    private long order_id;
+    @Column(name = "order_id")
+    private long orderId;
 
-    @Column
-    private String customer_name;
+//    @Column(name = "address_id")
+//    private long addressId;
 
-    @Column
-    private String address_type;
+    @ManyToOne
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
+    private Address address;
 
-    @Column
-    private String street;
-
-    @Column
-    private String street_add;
-
-    @Column
-    private String number;
-
-    @Column
-    private String postal_code;
-
-    @Column
-    private String city;
-
-    @Column
-    private String province;
-
-    @Column
-    private String country;
+    @OneToOne(mappedBy = "shipping")
+    @JsonIgnore
+    private Order order;
 }
 
