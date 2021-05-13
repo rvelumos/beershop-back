@@ -42,6 +42,9 @@ public class Customer {
     private String lastname;
 
     @Column
+    private String username;
+
+    @Column
     private String email;
 
     @Column(name="birth_date")
@@ -49,6 +52,8 @@ public class Customer {
 
     @Column
     private boolean newsletter;
+
+    private String message;
 
     @Column
     private String phone;

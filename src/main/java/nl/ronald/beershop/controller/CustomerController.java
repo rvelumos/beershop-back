@@ -27,7 +27,12 @@ public class CustomerController {
         return new ResponseEntity<>("Klant is toegevoegd", HttpStatus.CREATED);
     }
 
-    @RequestMapping(value={"/admin/customer/{id}", "customer/{id}"})
+    @GetMapping(value = "/customer/{username}")
+    public ResponseEntity<Object> getCustomerPoints(@PathVariable("username") String username) {
+        return ResponseEntity.ok().body(customerRepository.findByUsername(username));
+    }
+
+    @RequestMapping(value={"/admin/customer/{id}"})
     public ResponseEntity<Object> getCustomer(@PathVariable("id") long id) {
         Optional<Customer> customers = customerRepository.findById(id);
         return new ResponseEntity<>(customers, HttpStatus.OK);
@@ -45,8 +50,7 @@ public class CustomerController {
         return new ResponseEntity<>(customers, HttpStatus.OK);
     }
 
-    // auth check & related authorities fix
-    @PutMapping(value = "/admin/customer/{id}")
+    @PutMapping(value = "/customer/{id}")
     public Customer updateCustomer(@RequestBody Customer customer, @PathVariable Long id) {
 
         return customerRepository.findById(id)

@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -17,9 +18,16 @@ public class AddressController {
     @Autowired
     private AddressRepository addressRepository;
 
-    @GetMapping(value="/admin/address/{id}")
+    @RequestMapping(value="/admin/address/{id}")
     public ResponseEntity<Object> getAddress(@PathVariable("id") long id) {
         Optional<Address> address = addressRepository.findById(id);
+        return new ResponseEntity<>(address, HttpStatus.OK);
+    }
+
+
+    @RequestMapping(value="/address/customer/{username}")
+    public ResponseEntity<Object> getCustomerAddress(@PathVariable("username") String username) {
+        List<Address> address = addressRepository.findByUsername(username);
         return new ResponseEntity<>(address, HttpStatus.OK);
     }
 

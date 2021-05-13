@@ -49,4 +49,7 @@ public class Address {
     @Column
     private String country;
 
+    @Column
+    private String username;
+
 }

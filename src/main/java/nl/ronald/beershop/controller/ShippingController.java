@@ -45,6 +45,7 @@ public class ShippingController {
                 .map(updateShipping -> {
                     updateShipping.setOrderId(shipping.getOrderId());
                     updateShipping.setAddress(shipping.getAddress());
+                    updateShipping.setNote(shipping.getNote());
                     return shippingRepository.save(updateShipping);
                 })
                 .orElseGet(() -> {

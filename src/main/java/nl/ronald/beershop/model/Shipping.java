@@ -17,8 +17,8 @@ public class Shipping {
     @Column(name = "order_id")
     private long orderId;
 
-//    @Column(name = "address_id")
-//    private long addressId;
+    @Column
+    private String note;
 
     @ManyToOne
     @JoinColumn(name = "address_id", referencedColumnName = "id")
