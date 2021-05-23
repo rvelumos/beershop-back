@@ -42,20 +42,14 @@ public class ShippingController {
     @PutMapping(value = "/shipping/{id}")
     public Shipping updateShipping(@RequestBody Shipping shipping, @PathVariable Long id) {
         return shippingRepository.findById(id)
-                .map(updateShipping -> {
-                    updateShipping.setOrderId(shipping.getOrderId());
-                    updateShipping.setAddress(shipping.getAddress());
-                    updateShipping.setNote(shipping.getNote());
-                    return shippingRepository.save(updateShipping);
-                })
-                .orElseGet(() -> {
-                    return shippingRepository.save(shipping);
-                });
-    }
-
-    @DeleteMapping("/shipping/{id}")
-    public ResponseEntity<Object> deleteShipping(@PathVariable("id") long id) {
-        shippingRepository.deleteById(id);
-        return new ResponseEntity<>("Verwijderd", HttpStatus.OK);
+            .map(updateShipping -> {
+                updateShipping.setOrderId(shipping.getOrderId());
+                updateShipping.setAddress(shipping.getAddress());
+                updateShipping.setNote(shipping.getNote());
+                return shippingRepository.save(updateShipping);
+            })
+            .orElseGet(() -> {
+                return shippingRepository.save(shipping);
+            });
     }
 }

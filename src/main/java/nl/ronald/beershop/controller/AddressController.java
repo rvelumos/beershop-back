@@ -24,34 +24,33 @@ public class AddressController {
         return new ResponseEntity<>(address, HttpStatus.OK);
     }
 
-
     @RequestMapping(value="/address/customer/{username}")
     public ResponseEntity<Object> getCustomerAddress(@PathVariable("username") String username) {
         List<Address> address = addressRepository.findByUsername(username);
         return new ResponseEntity<>(address, HttpStatus.OK);
     }
 
-    @PostMapping(value="/admin/address")
+    @PostMapping(value="/address")
     public ResponseEntity<Object> createAddress(@RequestBody Address address) {
         addressRepository.save(address);
         URI location;
         return new ResponseEntity<>("Adres toegevoegd", HttpStatus.CREATED);
     }
 
-    @PutMapping(value = "/admin/address/{id}")
+    @PutMapping(value = "/address/{id}")
     public Address updateAddress(@RequestBody Address address, @PathVariable Long id) {
         return addressRepository.findById(id)
-                .map(updateAddress -> {
-                    updateAddress.setCustomer(address.getCustomer());
-                    return addressRepository.save(updateAddress);
-                })
-                .orElseGet(() -> {
-                    return addressRepository.save(address);
-                });
+            .map(updateAddress -> {
+                updateAddress.setCustomer(address.getCustomer());
+                return addressRepository.save(updateAddress);
+            })
+            .orElseGet(() -> {
+                return addressRepository.save(address);
+            });
     }
 
     @DeleteMapping("/admin/address/{id}")
-    public ResponseEntity<Object> deleteCategory(@PathVariable("id") long id) {
+    public ResponseEntity<Object> deleteAddress(@PathVariable("id") long id) {
         addressRepository.deleteById(id);
         return new ResponseEntity<>("Adresgegevens verwijderd", HttpStatus.OK);
     }

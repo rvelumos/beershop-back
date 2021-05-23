@@ -1,16 +1,26 @@
 package nl.ronald.beershop.service;
 
 import nl.ronald.beershop.exception.RecordNotFoundException;
+import nl.ronald.beershop.model.Document;
 import nl.ronald.beershop.model.Product;
+import nl.ronald.beershop.property.DocumentStorageProperty;
 import nl.ronald.beershop.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import nl.ronald.beershop.service.ProductSpecification.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.transaction.Transactional;
+
 import static org.springframework.data.jpa.domain.Specification.where;
 
 @Service
@@ -34,14 +44,24 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
-//    public Product getProductCategory(long category_id) {
-//        if (productRepository.existsById(category_id)) {
-//            return productRepository.findAllByCategory_id(category_id).get((int) category_id);
-//        }
-//        else {
-//            throw new RecordNotFoundException();
-//        }
-//    }
+    private final Path docStorageLocation;
+
+    @Autowired
+    public ProductServiceImpl(DocumentStorageProperty documentStorageProperty) throws IOException {
+        this.docStorageLocation = Paths.get(documentStorageProperty.getUploadDirectory()).toAbsolutePath().normalize();
+        Files.createDirectories(this.docStorageLocation);
+    }
+
+    @Override
+    @Transactional
+    public void addDocument(MultipartFile multipartFile) throws NoSuchAlgorithmException, IOException {
+         storeDocument(multipartFile);
+    }
+
+    private void storeDocument(MultipartFile file) throws IOException {
+        Path targetLocation = this.docStorageLocation;
+        Files.copy(file.getInputStream(), targetLocation.resolve(file.getOriginalFilename()));
+    }
 
     @Override
     public void save(Product Product) {

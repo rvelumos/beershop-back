@@ -18,7 +18,7 @@ public class Address {
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
 
-    @OneToMany(mappedBy = "address")
+    @OneToMany(mappedBy = "address", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Shipping> Shipping;
 

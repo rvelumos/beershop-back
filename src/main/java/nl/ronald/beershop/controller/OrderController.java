@@ -1,9 +1,11 @@
 package nl.ronald.beershop.controller;
 
 import nl.ronald.beershop.model.Order;
+import nl.ronald.beershop.payload.ConfirmationRequest;
+import nl.ronald.beershop.payload.SimpleEmailRequest;
 import nl.ronald.beershop.repository.OrderRepository;
+import nl.ronald.beershop.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -13,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
-import java.util.Properties;
 
 import static nl.ronald.beershop.model.Order.InvoiceStatus.UNPAID;
 import static nl.ronald.beershop.model.Order.OrderStatus.NEW_ADDED;
@@ -26,6 +27,16 @@ public class OrderController {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Autowired
+    EmailService emailService;
+
+    @PostMapping(value = "/customer/confirmation")
+    public ResponseEntity<Object> sendConfirmation(@RequestBody ConfirmationRequest request)
+    {
+        emailService.sendConfirmation(request);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @CrossOrigin
     @GetMapping(value = "/admin/orders")
     public ResponseEntity<Object> getOrders() {
@@ -33,7 +44,7 @@ public class OrderController {
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/admin/order/create", method = RequestMethod.POST)
+    @RequestMapping(value = "/order/create", method = RequestMethod.POST)
     public ResponseEntity<Object> createOrder(@RequestBody Order order) {
         order.setInvoiceStatus(UNPAID);
         order.setOrderStatus(NEW_ADDED);
@@ -67,9 +78,9 @@ public class OrderController {
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/orders/customer/{customerId}")
-    public ResponseEntity<Object> getCustomerOrders(@PathVariable("customerId") long customerId) {
-        List<Order> customerOrders = orderRepository.findByCustomerId(customerId);
+    @GetMapping(value = "/orders/customer/{username}")
+    public ResponseEntity<Object> getCustomerOrders(@PathVariable("username") String username) {
+        List<Order> customerOrders = orderRepository.findByUsername(username);
         return new ResponseEntity<>(customerOrders, HttpStatus.OK);
     }
 

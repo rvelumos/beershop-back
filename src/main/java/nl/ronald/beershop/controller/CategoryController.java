@@ -18,7 +18,7 @@ public class CategoryController {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @RequestMapping( {"/products/categories/", "/admin/products/categories/"} )
+    @RequestMapping( {"/products/categories", "/admin/products/categories"} )
     public ResponseEntity<Object> getCategories() {
         List<Category> category = categoryRepository.findAll();
         return new ResponseEntity<>(category, HttpStatus.OK);

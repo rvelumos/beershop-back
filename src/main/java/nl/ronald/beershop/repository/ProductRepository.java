@@ -8,25 +8,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
-
-    //List<Product> findAllById(Long id);
     List<Product> findByNameIgnoreCaseContaining(String name);
-    List<Product> findAllProductsByType(Long type);
     List<Product> findTop3ByTypeOrderByStockAsc(Long type);
     List<Product> findAllByDiscountNotNull();
-    List<Product> findTop5ByCategoryId(Long category_id);
-    List<Product> findAllByTypeNotContaining(Long type);
+    List<Product> findTop5ByCategoryId(Integer category_id);
 
-
-//    @Query( value = "SELECT * from Product p WHERE (:name is null or lower(p.name) LIKE %:name%) " +
-//            "AND (p.price = :price or :price = -1) " +
-//            "AND (p.category_id IN :categories ) " +
-//            "AND (p.taste = :taste OR :taste is null) ",
-//            nativeQuery = true
-//    )
     @Query( value = "SELECT * from Product p WHERE "+
         " (p.category_id IN :categories OR :categories is null)"+
          "AND p.type = :type",

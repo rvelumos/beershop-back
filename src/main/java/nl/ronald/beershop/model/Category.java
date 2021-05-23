@@ -12,9 +12,9 @@ public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Integer id;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", cascade=CascadeType.ALL)
     @JsonIgnore
     private Set<Product> Product;
 

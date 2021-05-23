@@ -8,7 +8,8 @@ import java.util.List;
 public interface DiscountRepository extends JpaRepository<Discount, Long> {
 
     List<Discount> findAllById(Long id);
-    List<Discount> findByCustomerIdAndName(Long customer_id, String name);
+    List<Discount> findByUsernameAndName(String username, String name);
+    List<Discount> findByUsername(String Username);
     List<Discount> findByProductId(Long product_id);
     List<Discount> findByCode(String code);
 }

@@ -2,6 +2,8 @@ package nl.ronald.beershop.controller;
 
 import nl.ronald.beershop.model.Discount;
 import nl.ronald.beershop.repository.DiscountRepository;
+import nl.ronald.beershop.service.DiscountService;
+import nl.ronald.beershop.service.DiscountServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,9 @@ public class DiscountController {
     @Autowired
     private DiscountRepository discountRepository;
 
+    @Autowired
+    private DiscountServiceImpl discountServiceImpl;
+
     @GetMapping(value="/products/giftcards/{code}")
     public ResponseEntity<Object> getGiftcardCode(@PathVariable("code") String code) {
         List<Discount> discounts = discountRepository.findByCode(code);
@@ -32,8 +37,7 @@ public class DiscountController {
 
     @PostMapping(value="/admin/products/discount")
     public ResponseEntity<Object> createDiscount(@RequestBody Discount discount) {
-        String discount_type=discount.getDiscount_type().toString();
-        discount.setCode(discount.randomCodeGenerator(discount_type));
+        discount.setCode(discountServiceImpl.randomCodeGenerator());
         discountRepository.save(discount);
         URI location;
         return new ResponseEntity<>("Toegevoegd", HttpStatus.CREATED);
@@ -51,10 +55,23 @@ public class DiscountController {
         return new ResponseEntity<>(discounts, HttpStatus.OK);
     }
 
-    @GetMapping(value="/products/giftcards/customer/{customer_id}")
-    public ResponseEntity<Object> getUserGiftCards(@PathVariable("customer_id") long customer_id) {
-        List<Discount> giftcards = discountRepository.findByCustomerIdAndName(customer_id, "Cadeaubon");
+    @GetMapping(value="/products/giftcards/customer/{username}")
+    public ResponseEntity<Object> getUserGiftCards(@PathVariable("username") String username) {
+        List<Discount> giftcards = discountRepository.findByUsernameAndName(username, "Cadeaubon");
         return new ResponseEntity<>(giftcards, HttpStatus.OK);
+    }
+
+    @PutMapping(value="/admin/products/discounts/usage/{id}")
+    public Discount updateUsages(@RequestBody Discount discount, @PathVariable Long id) {
+        return discountRepository.findById(id)
+            .map(updateUsages -> {
+                updateUsages.setUses(discount.getUses());
+
+                return discountRepository.save(updateUsages);
+            })
+            .orElseGet(() -> {
+                return discountRepository.save(discount);
+            });
     }
 
     @PutMapping(value="/admin/products/discounts/{id}")
@@ -63,7 +80,6 @@ public class DiscountController {
                 .map(updateDiscount -> {
                     updateDiscount.setCode(discount.getCode());
                     updateDiscount.setAllowed_usages(discount.getAllowed_usages());
-                    updateDiscount.setDiscount_type(discount.getDiscount_type());
                     updateDiscount.setExpiration_date(discount.getExpiration_date());
                     updateDiscount.setAmount(discount.getAmount());
                     updateDiscount.setName(discount.getName());

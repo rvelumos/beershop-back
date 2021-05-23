@@ -59,4 +59,7 @@ public class Order {
 
     @Enumerated(EnumType.STRING)
     private InvoiceStatus invoiceStatus;
+
+    @Column
+    private String username;
 }

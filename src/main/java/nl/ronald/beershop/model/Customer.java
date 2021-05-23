@@ -66,7 +66,4 @@ public class Customer {
     @JsonIgnore
     private Address address;
 
-    @Column(name="customer_points")
-    private String customerPoints;
-
 }

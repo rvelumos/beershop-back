@@ -27,18 +27,6 @@ public class SearchController {
         return new ResponseEntity<>("Zoekterm toegevoegd", HttpStatus.CREATED);
     }
 
-//    @PutMapping(value = "/search/{keyword}")
-//    public Search updateKeyword(@RequestBody Search search, @PathVariable String keyword) {
-//        return searchRepository.findByKeyword(keyword)
-//            .map(updateKeyword -> {
-//                updateKeyword.setKeyword(search.getKeyword());
-//                updateKeyword.setAmount(search.getAmount());
-//                return searchRepository.save(updateKeyword);
-//            })
-//            .orElseGet(() -> {
-//                return searchRepository.save(search);
-//            });
-//    }
 }
 
 

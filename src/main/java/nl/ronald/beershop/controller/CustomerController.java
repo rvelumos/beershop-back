@@ -27,14 +27,16 @@ public class CustomerController {
         return new ResponseEntity<>("Klant is toegevoegd", HttpStatus.CREATED);
     }
 
-    @GetMapping(value = "/customer/{username}")
-    public ResponseEntity<Object> getCustomerPoints(@PathVariable("username") String username) {
-        return ResponseEntity.ok().body(customerRepository.findByUsername(username));
-    }
 
     @RequestMapping(value={"/admin/customer/{id}"})
     public ResponseEntity<Object> getCustomer(@PathVariable("id") long id) {
         Optional<Customer> customers = customerRepository.findById(id);
+        return new ResponseEntity<>(customers, HttpStatus.OK);
+    }
+
+    @RequestMapping(value={"/customer/{username}"})
+    public ResponseEntity<Object> getCustomerByName(@PathVariable("username") String username) {
+        List<Customer> customers = customerRepository.findByUsername(username);
         return new ResponseEntity<>(customers, HttpStatus.OK);
     }
 
@@ -60,7 +62,6 @@ public class CustomerController {
                 updateCustomer.setEmail(customer.getEmail());
                 updateCustomer.setBirthDate(customer.getBirthDate());
                 updateCustomer.setPhone(customer.getPhone());
-                updateCustomer.setCustomerPoints(customer.getCustomerPoints());
                 updateCustomer.setNewsletter(customer.isNewsletter());
                 updateCustomer.setSex(customer.getSex());
 

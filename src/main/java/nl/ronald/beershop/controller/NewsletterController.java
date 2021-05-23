@@ -37,6 +37,20 @@ public class NewsletterController {
         return new ResponseEntity<>(newsletter, HttpStatus.OK);
     }
 
+    @PutMapping(value = "/newsletter/{id}")
+    public Newsletter updateNewsletter(@RequestBody Newsletter newsletter, @PathVariable Long id) {
+        return newsletterRepository.findById(id)
+            .map(updateNewsletter -> {
+                updateNewsletter.setAuthor(newsletter.getAuthor());
+                updateNewsletter.setContent(newsletter.getContent());
+                updateNewsletter.setName(newsletter.getName());
+                return newsletterRepository.save(updateNewsletter);
+            })
+            .orElseGet(() -> {
+                return newsletterRepository.save(newsletter);
+            });
+    }
+
     @DeleteMapping(value="/newsletter/{id}")
     public ResponseEntity<Object> deleteNewsletter(@PathVariable("id") long id) {
         newsletterRepository.deleteById(id);

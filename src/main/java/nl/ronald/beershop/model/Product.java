@@ -24,14 +24,11 @@ public class Product {
     @ManyToMany(mappedBy = "Product")
     Set<Order> Order;
 
-    @Column(name="category_id", insertable = false, updatable = false)
-    private long categoryId;
-//
-//    @Column(name="manufacturer_id")
-//    private long manufacturerId;
-
     @Column
     private String name;
+
+    @Column
+    private String image;
 
     @Column
     private String taste;

@@ -29,11 +29,6 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
-//    @Override
-//    public List<Customer> getCustomersTitleStartsWith(String title) {
-//        return customerRepository.findAllByTitleStartingWith(title);
-//    }
-
     @Override
     public void save(Customer Customer) {
         customerRepository.save(Customer);
