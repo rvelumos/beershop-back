@@ -1,5 +1,6 @@
 package nl.ronald.beershop.controller;
 
+import nl.ronald.beershop.model.Category;
 import nl.ronald.beershop.model.Product;
 import nl.ronald.beershop.repository.ProductRepository;
 import nl.ronald.beershop.service.ProductService;
@@ -50,7 +51,7 @@ public class ProductController {
 
     @GetMapping(value="/products/type/{type}/latest")
     public ResponseEntity<Object> getLatestProducts(@PathVariable("type") long type) {
-        List<Product> products = productRepository.findTop3ByTypeOrderByStockAsc(type);
+        List<Product> products = productRepository.findTop3ByTypeOrderByIdDesc(type);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
@@ -110,12 +111,13 @@ public class ProductController {
                 return productRepository.save(product);
             });
     }
-//
-//    @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = "multipart/form-data")
-//    public void addDocument(@RequestParam(value = "documents") MultipartFile[] multipartFiles)
-//            throws NoSuchAlgorithmException, IOException {
-//        productService.addDocuments(multipartFiles);
-//    }
+
+    @PostMapping(value="/admin/product/giftcard")
+    public ResponseEntity<Object> createProductGiftCard(@RequestBody Product product) {
+        productRepository.save(product);
+        URI location;
+        return new ResponseEntity<>("Cadeaubon toegevoegd", HttpStatus.CREATED);
+    }
 
     @CrossOrigin
     @GetMapping(value = "/product/{id}")
@@ -150,26 +152,6 @@ public class ProductController {
 
         }catch(Exception e){System.out.println(e);}
         return new ModelAndView("upload-success","filename",path+"/"+filename);
-    }
-//    public @ResponseBody String submit(@RequestParam("file") MultipartFile file, ModelMap modelMap) {
-//        modelMap.addAttribute("file", file);
-//        return "fileUploadView";
-//    }
-
-    //@PostMapping("/file-upload")
-//    public String uploadFile(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) throws FileStorageException {
-//
-//        fileUploadService.uploadFile(file);
-//
-//        redirectAttributes.addFlashAttribute("message",
-//                "You successfully uploaded " + file.getOriginalFilename() + "!");
-//
-//        return "redirect:/";
-//    }
-
-
-    public ResponseEntity<?> upload(@RequestParam(value = "file") MultipartFile file){
-        return new ResponseEntity<>(HttpStatus.valueOf(200));
     }
 
     @DeleteMapping("/admin/product/{id}")

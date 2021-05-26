@@ -21,8 +21,8 @@ public class Product {
     @JoinColumn(name="manufacturer_id", referencedColumnName = "id")
     private Manufacturer manufacturer;
 
-    @ManyToMany(mappedBy = "Product")
-    Set<Order> Order;
+    @ManyToMany(mappedBy = "productOrders")
+    Set<Order> ordered;
 
     @Column
     private String name;

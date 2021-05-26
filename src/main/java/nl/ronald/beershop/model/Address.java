@@ -14,8 +14,11 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+//    private Customer customer;
+    @OneToOne(mappedBy = "address")
+    @JsonIgnore
     private Customer customer;
 
     @OneToMany(mappedBy = "address", cascade = CascadeType.ALL)

@@ -1,11 +1,7 @@
 package nl.ronald.beershop.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 @Data
 @Entity
@@ -32,8 +28,8 @@ public class Customer {
     @Enumerated(EnumType.STRING)
     private sex sex;
 
-    @Column(name="user_id")
-    private long userId;
+//    @Column(name="user_id")
+//    private long userId;
 
     @Column
     private String firstname;
@@ -62,8 +58,12 @@ public class Customer {
 //    @JoinColumn(name = "address_id")
 //    private Customer customer;
 
-    @OneToOne(mappedBy = "customer")
-    @JsonIgnore
+//    @OneToOne(mappedBy = "customer")
+//    @JsonIgnore
+//    private Address address;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
 
 }

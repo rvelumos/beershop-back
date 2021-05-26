@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
     List<Product> findByNameIgnoreCaseContaining(String name);
-    List<Product> findTop3ByTypeOrderByStockAsc(Long type);
+    List<Product> findTop3ByTypeOrderByIdDesc(Long type);
     List<Product> findAllByDiscountNotNull();
     List<Product> findTop5ByCategoryId(Integer category_id);
 

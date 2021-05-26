@@ -2,14 +2,11 @@ package nl.ronald.beershop.controller;
 
 import nl.ronald.beershop.model.Order;
 import nl.ronald.beershop.payload.ConfirmationRequest;
-import nl.ronald.beershop.payload.SimpleEmailRequest;
 import nl.ronald.beershop.repository.OrderRepository;
 import nl.ronald.beershop.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -84,7 +81,7 @@ public class OrderController {
         return new ResponseEntity<>(customerOrders, HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/order/{id}")
+    @DeleteMapping(value = "/admin/order/{id}")
     public ResponseEntity<Object> deleteOrder(@PathVariable("user_id") long id) {
         orderRepository.deleteById(id);
         return new ResponseEntity<>("Verwijderd", HttpStatus.OK);
