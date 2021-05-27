@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,7 +32,6 @@ public class CategoryController {
     @PostMapping(value="/admin/products/category")
     public ResponseEntity<Object> createCategory(@RequestBody Category category) {
         categoryRepository.save(category);
-        URI location;
         return new ResponseEntity<>("Categorie toegevoegd", HttpStatus.CREATED);
     }
 
@@ -44,9 +42,7 @@ public class CategoryController {
                 updateCategory.setName(category.getName());
                 return categoryRepository.save(updateCategory);
             })
-            .orElseGet(() -> {
-                return categoryRepository.save(category);
-            });
+            .orElseGet(() -> categoryRepository.save(category));
     }
 
     @DeleteMapping("/admin/products/category/{id}")

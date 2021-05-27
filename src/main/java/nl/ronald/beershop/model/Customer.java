@@ -16,20 +16,8 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    //@OneToMany(mappedBy = "orders")
-    //private List<Order> order = new ArrayList<>();
-
-//    @OneToMany(mappedBy="customer")
-//    private Set<Discount> Discounts;
-//
-//    @OneToMany(mappedBy="customer")
-//    private Set<Order> Orders;
-
     @Enumerated(EnumType.STRING)
     private sex sex;
-
-//    @Column(name="user_id")
-//    private long userId;
 
     @Column
     private String firstname;
@@ -54,16 +42,7 @@ public class Customer {
     @Column
     private String phone;
 
-//    @ManyToOne
-//    @JoinColumn(name = "address_id")
-//    private Customer customer;
-
-//    @OneToOne(mappedBy = "customer")
-//    @JsonIgnore
-//    private Address address;
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
-
 }

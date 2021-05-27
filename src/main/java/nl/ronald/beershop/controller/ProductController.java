@@ -1,27 +1,20 @@
 package nl.ronald.beershop.controller;
 
-import nl.ronald.beershop.model.Category;
 import nl.ronald.beershop.model.Product;
 import nl.ronald.beershop.repository.ProductRepository;
 import nl.ronald.beershop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartResolver;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
 import javax.servlet.MultipartConfigElement;
-import javax.servlet.http.HttpSession;
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -88,12 +81,12 @@ public class ProductController {
             @RequestParam (name="taste", defaultValue = "")Optional<String> taste) {
 
             List<Product> products = productService.findProductByFilterValues(type, price, category_id, taste);
-
             return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    @PutMapping(value = "/admin/product/{id}")
-    public Product updateProduct(@RequestBody Product product, @PathVariable Long id) {
+//    @PutMapping(value = "/admin/product/{id}")
+    @RequestMapping(value="/admin/product/{id}", method = RequestMethod.PUT, consumes = "multipart/form-data")
+    public Product updateProduct(@ModelAttribute Product product, @PathVariable long id, @RequestParam(value = "documents") MultipartFile multipartFile) throws IOException, NoSuchAlgorithmException {
         return productRepository.findById(id)
             .map(updateProduct -> {
                 updateProduct.setCategory(product.getCategory());
@@ -112,10 +105,25 @@ public class ProductController {
             });
     }
 
+    @PutMapping(value = "/admin/product/giftcard/{id}")
+    public Product updateGiftProduct(@RequestBody Product product, @PathVariable Long id) {
+        return productRepository.findById(id)
+                .map(updateProduct -> {
+                    updateProduct.setCategory(product.getCategory());
+                    updateProduct.setManufacturer(product.getManufacturer());
+                    updateProduct.setName(product.getName());
+                    updateProduct.setPrice(product.getPrice());
+                    updateProduct.setDescription(product.getDescription());
+                    return productRepository.save(updateProduct);
+                })
+                .orElseGet(() -> {
+                    return productRepository.save(product);
+                });
+    }
+
     @PostMapping(value="/admin/product/giftcard")
     public ResponseEntity<Object> createProductGiftCard(@RequestBody Product product) {
         productRepository.save(product);
-        URI location;
         return new ResponseEntity<>("Cadeaubon toegevoegd", HttpStatus.CREATED);
     }
 
@@ -126,7 +134,7 @@ public class ProductController {
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
-    @RequestMapping(value="/admin/product" , method = RequestMethod.POST, consumes = "multipart/form-data")
+    @RequestMapping(value="/admin/product", method = RequestMethod.POST, consumes = "multipart/form-data")
     public ResponseEntity<Object> createProduct(@ModelAttribute Product product, @RequestParam(value = "documents") MultipartFile multipartFile) throws IOException, NoSuchAlgorithmException {
         productService.addDocument(multipartFile);
         product.setImage(multipartFile.getOriginalFilename());
@@ -134,25 +142,25 @@ public class ProductController {
         URI location;
         return new ResponseEntity<>("Toegevoegd", HttpStatus.CREATED);
     }
-
-    @RequestMapping(value="/admin/forms/upload",method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ModelAndView upload(@RequestParam CommonsMultipartFile file, HttpSession session){
-        String path=session.getServletContext().getRealPath("/product_images/");
-        String filename=file.getOriginalFilename();
-
-        System.out.println(path+" "+filename);
-        try{
-            byte barr[]=file.getBytes();
-
-            BufferedOutputStream bout=new BufferedOutputStream(
-                    new FileOutputStream(path+"/"+filename));
-            bout.write(barr);
-            bout.flush();
-            bout.close();
-
-        }catch(Exception e){System.out.println(e);}
-        return new ModelAndView("upload-success","filename",path+"/"+filename);
-    }
+//
+//    @RequestMapping(value="/admin/forms/upload",method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ModelAndView upload(@RequestParam CommonsMultipartFile file, HttpSession session){
+//        String path=session.getServletContext().getRealPath("/product_images/");
+//        String filename=file.getOriginalFilename();
+//
+//        System.out.println(path+" "+filename);
+//        try{
+//            byte barr[]=file.getBytes();
+//
+//            BufferedOutputStream bout=new BufferedOutputStream(
+//                    new FileOutputStream(path+"/"+filename));
+//            bout.write(barr);
+//            bout.flush();
+//            bout.close();
+//
+//        }catch(Exception e){System.out.println(e);}
+//        return new ModelAndView("upload-success","filename",path+"/"+filename);
+//    }
 
     @DeleteMapping("/admin/product/{id}")
     public ResponseEntity<Object> deleteProduct(@PathVariable("id") long id) {

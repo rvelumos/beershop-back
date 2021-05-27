@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +14,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping(value = "/api/v1")
 public class AddressController {
+
     @Autowired
     private AddressRepository addressRepository;
 
@@ -33,7 +33,6 @@ public class AddressController {
     @PostMapping(value="/address")
     public ResponseEntity<Object> createAddress(@RequestBody Address address) {
         addressRepository.save(address);
-        URI location;
         return new ResponseEntity<>("Adres toegevoegd", HttpStatus.CREATED);
     }
 
@@ -41,12 +40,17 @@ public class AddressController {
     public Address updateAddress(@RequestBody Address address, @PathVariable Long id) {
         return addressRepository.findById(id)
             .map(updateAddress -> {
-                updateAddress.setCustomer(address.getCustomer());
+                updateAddress.setStreet(address.getStreet());
+                updateAddress.setStreetAdd(address.getStreetAdd());
+                updateAddress.setNumber(address.getNumber());
+                updateAddress.setAddressType(address.getAddressType());
+                updateAddress.setPostalCode(address.getPostalCode());
+                updateAddress.setProvince(address.getProvince());
+                updateAddress.setCountry(address.getCountry());
+                updateAddress.setCity(address.getCity());
                 return addressRepository.save(updateAddress);
             })
-            .orElseGet(() -> {
-                return addressRepository.save(address);
-            });
+            .orElseGet(() -> addressRepository.save(address));
     }
 
     @DeleteMapping("/admin/address/{id}")
