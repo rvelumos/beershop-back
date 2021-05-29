@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,7 +46,6 @@ public class OrderController {
         order.setOrderStatus(NEW_ADDED);
         orderRepository.save(order);
         //getJavaMailSender().send();
-        URI location;
         return new ResponseEntity<>("Toegevoegd", HttpStatus.CREATED);
     }
 
@@ -64,9 +62,7 @@ public class OrderController {
 
                     return orderRepository.save(updateOrder);
                 })
-                .orElseGet(() -> {
-                    return orderRepository.save(order);
-                });
+                .orElseGet(() -> orderRepository.save(order));
     }
 
     @GetMapping(value = "/order/{id}")
@@ -82,7 +78,7 @@ public class OrderController {
     }
 
     @DeleteMapping(value = "/admin/order/{id}")
-    public ResponseEntity<Object> deleteOrder(@PathVariable("user_id") long id) {
+    public ResponseEntity<Object> deleteOrder(@PathVariable("id") long id) {
         orderRepository.deleteById(id);
         return new ResponseEntity<>("Verwijderd", HttpStatus.OK);
     }

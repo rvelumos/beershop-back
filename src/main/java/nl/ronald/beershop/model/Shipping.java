@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Data
 @Entity
@@ -20,12 +19,32 @@ public class Shipping {
     @Column
     private String note;
 
-    @ManyToOne
-    @JoinColumn(name = "address_id", referencedColumnName = "id")
-    private Address address;
-
     @OneToOne(mappedBy = "shipping")
     @JsonIgnore
     private Order order;
+
+    @Column
+    private String street;
+
+    @Column(name="street_add")
+    private String streetAdd;
+
+    @Column
+    private String number;
+
+    @Column(name="postal_code")
+    private String postalCode;
+
+    @Column
+    private String city;
+
+    @Column
+    private String province;
+
+    @Column
+    private String country;
+
+    @Column
+    private String username;
 }
 

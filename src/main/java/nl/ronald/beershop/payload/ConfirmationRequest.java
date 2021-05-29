@@ -20,4 +20,5 @@ public class ConfirmationRequest {
     public String name;
     public String amount;
     public String totalPrice;
+    public Integer orderId;
 }

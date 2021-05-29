@@ -1,6 +1,5 @@
 package nl.ronald.beershop.controller;
 
-import nl.ronald.beershop.model.Newsletter;
 import nl.ronald.beershop.model.NewsletterSubscriber;
 import nl.ronald.beershop.repository.NewsletterSubscriberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -26,7 +24,6 @@ public class NewsletterSubscriberController {
     @PostMapping(value="/newsletter/subscriber/create")
     public ResponseEntity<Object> createNewsletterSubscriber(@RequestBody NewsletterSubscriber newsletterSubscriber) {
         newsletterSubscriberRepository.save(newsletterSubscriber);
-        URI location;
         return new ResponseEntity<>("Succesvol aangemeld", HttpStatus.CREATED);
     }
 

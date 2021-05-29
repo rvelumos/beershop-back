@@ -15,9 +15,6 @@ public class Discount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "customer_id")
-    private Integer customerId;
-
     @Column(name = "product_id")
     private long productId;
 

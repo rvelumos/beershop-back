@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +26,6 @@ public class NewsletterController {
     @PostMapping(value="/newsletter")
     public ResponseEntity<Object> createNewsletter(@RequestBody Newsletter newsletter) {
         newsletterRepository.save(newsletter);
-        URI location;
         return new ResponseEntity<>("Nieuwsbrief toegevoegd", HttpStatus.CREATED);
     }
 
@@ -46,9 +44,7 @@ public class NewsletterController {
                 updateNewsletter.setName(newsletter.getName());
                 return newsletterRepository.save(updateNewsletter);
             })
-            .orElseGet(() -> {
-                return newsletterRepository.save(newsletter);
-            });
+            .orElseGet(() -> newsletterRepository.save(newsletter));
     }
 
     @DeleteMapping(value="/newsletter/{id}")

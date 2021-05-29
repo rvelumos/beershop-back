@@ -31,6 +31,9 @@ public class Customer {
     @Column
     private String email;
 
+    @Column
+    private String company;
+
     @Column(name="birth_date")
     private String birthDate;
 

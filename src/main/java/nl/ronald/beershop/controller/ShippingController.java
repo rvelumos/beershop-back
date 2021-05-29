@@ -1,6 +1,5 @@
 package nl.ronald.beershop.controller;
 
-import nl.ronald.beershop.model.Product;
 import nl.ronald.beershop.model.Shipping;
 import nl.ronald.beershop.repository.ShippingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +33,6 @@ public class ShippingController {
     @PostMapping(value="/shipping")
     public ResponseEntity<Object> createShipping(@RequestBody Shipping shipping) {
         shippingRepository.save(shipping);
-        URI location;
         return new ResponseEntity<>("Toegevoegd", HttpStatus.CREATED);
     }
 
@@ -44,12 +41,16 @@ public class ShippingController {
         return shippingRepository.findById(id)
             .map(updateShipping -> {
                 updateShipping.setOrderId(shipping.getOrderId());
-                updateShipping.setAddress(shipping.getAddress());
+                updateShipping.setStreet(shipping.getStreet());
+                updateShipping.setStreetAdd(shipping.getStreetAdd());
+                updateShipping.setNumber(shipping.getNumber());
+                updateShipping.setPostalCode(shipping.getPostalCode());
+                updateShipping.setProvince(shipping.getProvince());
+                updateShipping.setCountry(shipping.getCountry());
+                updateShipping.setCity(shipping.getCity());
                 updateShipping.setNote(shipping.getNote());
                 return shippingRepository.save(updateShipping);
             })
-            .orElseGet(() -> {
-                return shippingRepository.save(shipping);
-            });
+            .orElseGet(() -> shippingRepository.save(shipping));
     }
 }

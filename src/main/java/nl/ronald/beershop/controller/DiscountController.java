@@ -2,14 +2,12 @@ package nl.ronald.beershop.controller;
 
 import nl.ronald.beershop.model.Discount;
 import nl.ronald.beershop.repository.DiscountRepository;
-import nl.ronald.beershop.service.DiscountService;
 import nl.ronald.beershop.service.DiscountServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,7 +37,6 @@ public class DiscountController {
     public ResponseEntity<Object> createDiscount(@RequestBody Discount discount) {
         discount.setCode(discountServiceImpl.randomCodeGenerator());
         discountRepository.save(discount);
-        URI location;
         return new ResponseEntity<>("Toegevoegd", HttpStatus.CREATED);
     }
 
@@ -69,9 +66,7 @@ public class DiscountController {
 
                 return discountRepository.save(updateUsages);
             })
-            .orElseGet(() -> {
-                return discountRepository.save(discount);
-            });
+            .orElseGet(() -> discountRepository.save(discount));
     }
 
     @PutMapping(value="/admin/products/discounts/{id}")
@@ -86,9 +81,7 @@ public class DiscountController {
 
                     return discountRepository.save(updateDiscount);
                 })
-                .orElseGet(() -> {
-                    return discountRepository.save(discount);
-                });
+                .orElseGet(() -> discountRepository.save(discount));
     }
 
     //auth fix!

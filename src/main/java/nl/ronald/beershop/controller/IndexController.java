@@ -1,8 +1,5 @@
 package nl.ronald.beershop.controller;
 
-import nl.ronald.beershop.model.Customer;
-import nl.ronald.beershop.model.Index;
-import nl.ronald.beershop.model.Product;
 import nl.ronald.beershop.payload.SimpleEmailRequest;
 import nl.ronald.beershop.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;

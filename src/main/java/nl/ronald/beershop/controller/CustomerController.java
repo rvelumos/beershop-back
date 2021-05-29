@@ -60,6 +60,7 @@ public class CustomerController {
                 updateCustomer.setFirstname(customer.getFirstname());
                 updateCustomer.setLastname(customer.getLastname());
                 updateCustomer.setEmail(customer.getEmail());
+                updateCustomer.setCompany(customer.getCompany());
                 updateCustomer.setBirthDate(customer.getBirthDate());
                 updateCustomer.setPhone(customer.getPhone());
                 updateCustomer.setNewsletter(customer.isNewsletter());

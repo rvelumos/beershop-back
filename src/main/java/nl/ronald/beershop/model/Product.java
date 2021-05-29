@@ -39,7 +39,7 @@ public class Product {
     @Column
     private Integer stock;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column

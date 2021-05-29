@@ -1,6 +1,5 @@
 package nl.ronald.beershop.controller;
 
-import nl.ronald.beershop.exception.BadRequestException;
 import nl.ronald.beershop.model.Authority;
 import nl.ronald.beershop.model.User;
 import nl.ronald.beershop.repository.AuthorityRepository;
@@ -11,8 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.net.URI;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -63,7 +60,6 @@ public class UserController {
     @PostMapping(value = "/create_authority")
     public ResponseEntity<Object> createUserAuthority(@RequestBody Authority authority) {
         authorityRepository.save(authority);
-        URI location;
         return new ResponseEntity<>("Rol is toegevoegd", HttpStatus.CREATED);
     }
 
@@ -72,7 +68,6 @@ public class UserController {
         String password = user.getPassword();
         user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);
-        URI location;
         return new ResponseEntity<>("User is toegevoegd", HttpStatus.CREATED);
     }
 

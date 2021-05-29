@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Data
 @Entity
@@ -14,19 +13,13 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "customer_id", referencedColumnName = "id")
-//    private Customer customer;
     @OneToOne(mappedBy = "address")
     @JsonIgnore
     private Customer customer;
 
-    @OneToMany(mappedBy = "address", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Set<Shipping> Shipping;
-
-//    @Column(name="customer_id")
-//    private Long customerId;
+//    @OneToMany(mappedBy = "address", cascade = CascadeType.ALL)
+//    @JsonIgnore
+//    private Set<Shipping> Shipping;
 
     @Column(name="address_type")
     private String addressType;
@@ -54,5 +47,4 @@ public class Address {
 
     @Column
     private String username;
-
 }
