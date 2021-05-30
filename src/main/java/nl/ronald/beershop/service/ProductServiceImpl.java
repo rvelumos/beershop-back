@@ -1,7 +1,6 @@
 package nl.ronald.beershop.service;
 
 import nl.ronald.beershop.exception.RecordNotFoundException;
-import nl.ronald.beershop.model.Document;
 import nl.ronald.beershop.model.Product;
 import nl.ronald.beershop.property.DocumentStorageProperty;
 import nl.ronald.beershop.repository.ProductRepository;
@@ -18,10 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.transaction.Transactional;
-
-import static org.springframework.data.jpa.domain.Specification.where;
 
 @Service
 public class ProductServiceImpl implements ProductService {

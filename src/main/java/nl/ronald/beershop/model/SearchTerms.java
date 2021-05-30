@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
-public class Search {
+public class SearchTerms {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,7 +1,9 @@
 package nl.ronald.beershop.controller;
 
 import nl.ronald.beershop.model.Newsletter;
+import nl.ronald.beershop.payload.NewsLetterRequest;
 import nl.ronald.beershop.repository.NewsletterRepository;
+import nl.ronald.beershop.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,9 @@ import java.util.Optional;
 public class NewsletterController {
     @Autowired
     private NewsletterRepository newsletterRepository;
+
+    @Autowired
+    private EmailService emailService;
 
     @GetMapping(value="/newsletters")
     public ResponseEntity<Object> getNewsletters() {
@@ -33,6 +38,13 @@ public class NewsletterController {
     public ResponseEntity<Object> getNewsletter(@PathVariable("id") long id) {
         Optional<Newsletter> newsletter = newsletterRepository.findById(id);
         return new ResponseEntity<>(newsletter, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/newsletter/{id}/send_bulk")
+    public ResponseEntity<Object> sendContactForm(@RequestBody NewsLetterRequest request, @PathVariable Long id)
+    {
+        emailService.sendBulkMail(request);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping(value = "/newsletter/{id}")

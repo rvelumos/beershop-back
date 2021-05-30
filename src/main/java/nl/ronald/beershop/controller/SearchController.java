@@ -1,8 +1,7 @@
 package nl.ronald.beershop.controller;
 
-import nl.ronald.beershop.model.Product;
-import nl.ronald.beershop.model.Search;
-import nl.ronald.beershop.repository.SearchRepository;
+import nl.ronald.beershop.model.SearchTerms;
+import nl.ronald.beershop.repository.SearchTermsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,19 +15,19 @@ import java.util.List;
 public class SearchController {
 
     @Autowired
-    private SearchRepository searchRepository;
+    private SearchTermsRepository searchTermsRepository;
 
     @GetMapping(value = "/keywords/top")
     public ResponseEntity<Object> getTopKeywords() {
-        List<Search> search = searchRepository.findTop10Keywords();
-        return new ResponseEntity<>(search, HttpStatus.OK);
+        List<SearchTerms> searchTerms = searchTermsRepository.findTop10Keywords();
+        return new ResponseEntity<>(searchTerms, HttpStatus.OK);
     }
 
     @PostMapping(value="/search/{keyword}")
-    public ResponseEntity<Object> createKeyword(@RequestBody Search search, @PathVariable String keyword) {
-        search.setAmount(1);
-        search.setKeyword(keyword);
-        searchRepository.save(search);
+    public ResponseEntity<Object> createKeyword(@RequestBody SearchTerms searchTerms, @PathVariable String keyword) {
+        searchTerms.setAmount(1);
+        searchTerms.setKeyword(keyword);
+        searchTermsRepository.save(searchTerms);
         return new ResponseEntity<>("Zoekterm toegevoegd", HttpStatus.CREATED);
     }
 

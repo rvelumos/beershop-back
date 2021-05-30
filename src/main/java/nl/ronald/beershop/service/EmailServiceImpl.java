@@ -3,6 +3,7 @@ package nl.ronald.beershop.service;
 import nl.ronald.beershop.exception.BadRequestException;
 import nl.ronald.beershop.model.Customer;
 import nl.ronald.beershop.payload.ConfirmationRequest;
+import nl.ronald.beershop.payload.NewsLetterRequest;
 import nl.ronald.beershop.payload.SimpleEmailRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -30,6 +31,46 @@ public class EmailServiceImpl implements EmailService {
         emailSender.send(message);
     }
 
+    public void sendAccountConfirmation(ConfirmationRequest request) {
+        try {
+            MimeMessage message = emailSender.createMimeMessage();
+
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+            String content = "<h2>Bevestiging registratie</h2>" +
+                    "Beste " + request.getFirstname() + ", <br /><br /> " +
+                    "Bedankt voor jouw registratie op beershop.nl! Om direct in te loggen, <a href='http://localhost:3000/mijn_account'>klik hier</a>." +
+                    "<br /><br /><p>Heb jij je niet aangemeld? Stuur dan even een bericht, dan halen we de gegevens uit het systeem!</p>";
+
+            helper.setFrom("noreply@beershop.nl");
+            helper.setTo(request.getEmail());
+            helper.setSubject("Bevestiging registratie op beershop.nl");
+            helper.setText(content, true);
+
+            emailSender.send(message);
+        } catch(Exception ex) {
+            throw new BadRequestException();
+        }
+    }
+
+    public void sendBulkMail(NewsLetterRequest request) {
+        try {
+            MimeMessage message = emailSender.createMimeMessage();
+
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+            helper.setFrom("noreply@beershop.nl");
+            helper.setTo(request.getEmail());
+            //helper.setBcc(emailList);
+            helper.setSubject(request.getTitle());
+            helper.setText(request.getBody(), true);
+
+            emailSender.send(message);
+        } catch(Exception ex) {
+            throw new BadRequestException();
+        }
+    }
+
     public void sendConfirmation(ConfirmationRequest request) {
         try {
             MimeMessage message = emailSender.createMimeMessage();
@@ -40,8 +81,10 @@ public class EmailServiceImpl implements EmailService {
                     "Geachte " + request.getFirstname() + ", <br /><br /> Hieronder vind je jouw bestelling:<br />" +
                     "<div>Jouw bestelling</h2></b></td><td>&nbsp;</td></tr>" +
                     "<table style='width: 500px; background-color:#fcfcfc; border: 1px solid #eee; padding: 20px;'><tbody>" +
-                    "<tr><td style='padding: 10px;'><b>Besteld:</b></td><td>&nbsp;</td><td>&nbsp;</td></tr>" +
-                    "<tr><td style='padding: 10px;'>" +request.getName()+ "</td><td>" +request.getAmount()+ " x</td><td>" +request.getTotalPrice()+"</td></tr>" +
+                    "<tr><td style='padding: 10px;'><b>Artikel</n></td><td><b>Aantal</b></td><td><b>Totaalprijs</b></td></tr></table>" +
+                    "<tr><td style='padding: 10px;'>" +request.getName()+ "</td><td>" +request.getAmount()+ " x</td><td>€" +request.getTotalPrice()+"</td></tr></table>" +
+                    "<p>Betaling: <i>Nog te voldoen</i>"+
+                    "<table style='width: 500px; background-color:#fcfcfc; border: 1px solid #eee; padding: 20px;'><tbody>" +
                     "<tr><td style='padding: 10px;' colspan='3'><h3>Adresgegevens</h3></td></tr>" +
                     "<tr><td style='padding: 10px;'>"+request.getFirstname()+" "+request.getLastname()+"</td></tr>" +
                     "<tr><td style='padding: 10px;'>"+request.getStreet()+" "+request.getStreetAdd()+" "+request.getNumber()+" </td></tr>" +

@@ -1,13 +1,15 @@
 package nl.ronald.beershop.controller;
 
 import nl.ronald.beershop.model.Customer;
+import nl.ronald.beershop.payload.ConfirmationRequest;
+import nl.ronald.beershop.payload.SimpleEmailRequest;
 import nl.ronald.beershop.repository.CustomerRepository;
+import nl.ronald.beershop.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,13 +22,21 @@ public class CustomerController {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Autowired
+    EmailService emailService;
+
     @RequestMapping(value = {"/customer", "/admin/customer"}, method = POST)
     public ResponseEntity<Object> createCustomer(@RequestBody Customer customer) {
         customerRepository.save(customer);
-        URI location;
         return new ResponseEntity<>("Klant is toegevoegd", HttpStatus.CREATED);
     }
 
+    @PostMapping(value = "/customer/account_confirmation")
+    public ResponseEntity<Object> sendAccountConfirmation(@RequestBody ConfirmationRequest request)
+    {
+        emailService.sendAccountConfirmation(request);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @RequestMapping(value={"/admin/customer/{id}"})
     public ResponseEntity<Object> getCustomer(@PathVariable("id") long id) {
