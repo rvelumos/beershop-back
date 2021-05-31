@@ -1,7 +1,6 @@
 package nl.ronald.beershop.service;
 
 import nl.ronald.beershop.exception.BadRequestException;
-import nl.ronald.beershop.model.Customer;
 import nl.ronald.beershop.payload.ConfirmationRequest;
 import nl.ronald.beershop.payload.NewsLetterRequest;
 import nl.ronald.beershop.payload.SimpleEmailRequest;

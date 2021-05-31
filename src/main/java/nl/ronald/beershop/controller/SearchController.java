@@ -1,5 +1,6 @@
 package nl.ronald.beershop.controller;
 
+import nl.ronald.beershop.model.ISearchTermsCount;
 import nl.ronald.beershop.model.SearchTerms;
 import nl.ronald.beershop.repository.SearchTermsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class SearchController {
 
     @GetMapping(value = "/keywords/top")
     public ResponseEntity<Object> getTopKeywords() {
-        List<SearchTerms> searchTerms = searchTermsRepository.findTop10Keywords();
+        List<ISearchTermsCount> searchTerms = searchTermsRepository.countKeywordNameByKeywordAmountInterface();
         return new ResponseEntity<>(searchTerms, HttpStatus.OK);
     }
 
