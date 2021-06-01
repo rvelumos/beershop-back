@@ -61,4 +61,4 @@ Nu wordt het databestand niet meer gebruikt en kan je verder met de huidige data
 De data uit het data.sql bestand dient enkel ter voorbeeld en kan verwijderd worden via https://localhost:8080/cms/. 
 Daar log je in met het administrator account.
 
-[ga verder naar de front-end installatie] [https://github.com/rvelumos/beershop-front]
+Ga verder naar de front-end installatie: https://github.com/rvelumos/beershop-front
