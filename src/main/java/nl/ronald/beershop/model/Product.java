@@ -1,5 +1,6 @@
 package nl.ronald.beershop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -21,8 +22,9 @@ public class Product {
     @JoinColumn(name="manufacturer_id", referencedColumnName = "id")
     private Manufacturer manufacturer;
 
-    @ManyToMany(mappedBy = "productOrders")
-    Set<Order> ordered;
+//    @ManyToMany(mappedBy = "productOrders")
+//    @JsonIgnore
+//    Set<Order> ordered;
 
     @Column
     private String name;
