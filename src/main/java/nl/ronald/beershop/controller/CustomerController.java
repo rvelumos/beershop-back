@@ -2,7 +2,6 @@ package nl.ronald.beershop.controller;
 
 import nl.ronald.beershop.model.Customer;
 import nl.ronald.beershop.payload.ConfirmationRequest;
-import nl.ronald.beershop.payload.SimpleEmailRequest;
 import nl.ronald.beershop.repository.CustomerRepository;
 import nl.ronald.beershop.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +63,6 @@ public class CustomerController {
 
     @PutMapping(value = "/customer/{id}")
     public Customer updateCustomer(@RequestBody Customer customer, @PathVariable Long id) {
-
         return customerRepository.findById(id)
             .map(updateCustomer -> {
                 updateCustomer.setFirstname(customer.getFirstname());
@@ -78,8 +76,6 @@ public class CustomerController {
 
                 return customerRepository.save(updateCustomer);
             })
-            .orElseGet(() -> {
-                return customerRepository.save(customer);
-            });
+            .orElseGet(() -> customerRepository.save(customer));
     }
 }

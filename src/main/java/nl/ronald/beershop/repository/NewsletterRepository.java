@@ -8,5 +8,4 @@ import java.util.List;
 public interface NewsletterRepository extends JpaRepository<Newsletter, Long> {
 
     List<Newsletter> findAllById(Long id);
-
 }

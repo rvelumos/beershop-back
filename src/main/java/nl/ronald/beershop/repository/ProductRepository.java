@@ -21,9 +21,6 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
         nativeQuery = true
     )
     List<Product> findProductByFilterValues(
-            //@Param("price") Double price,
-//            @Param("taste") String taste,
-//            @Param("name") String name,
             @PathVariable("type") long type,
             @Param("categories") List<Long> categories);
 }

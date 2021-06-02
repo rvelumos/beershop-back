@@ -29,5 +29,4 @@ public class Manufacturer {
 
     @Column
     private String phone;
-
 }

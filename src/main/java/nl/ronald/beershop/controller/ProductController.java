@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
 import javax.servlet.MultipartConfigElement;
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -84,7 +83,6 @@ public class ProductController {
             return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-//    @PutMapping(value = "/admin/product/{id}")
     @RequestMapping(value="/admin/product/{id}", method = RequestMethod.PUT, consumes = "multipart/form-data")
     public Product updateProduct(@ModelAttribute Product product, @PathVariable long id, @RequestParam(value = "documents") MultipartFile multipartFile) throws IOException, NoSuchAlgorithmException {
         return productRepository.findById(id)
@@ -100,9 +98,7 @@ public class ProductController {
                 updateProduct.setType(product.getType());
                 return productRepository.save(updateProduct);
             })
-            .orElseGet(() -> {
-                return productRepository.save(product);
-            });
+            .orElseGet(() -> productRepository.save(product));
     }
 
     @PutMapping(value = "/admin/product/giftcard/{id}")
@@ -116,9 +112,7 @@ public class ProductController {
                     updateProduct.setDescription(product.getDescription());
                     return productRepository.save(updateProduct);
                 })
-                .orElseGet(() -> {
-                    return productRepository.save(product);
-                });
+                .orElseGet(() -> productRepository.save(product));
     }
 
     @PostMapping(value="/admin/product/giftcard")
@@ -139,28 +133,8 @@ public class ProductController {
         productService.addDocument(multipartFile);
         product.setImage(multipartFile.getOriginalFilename());
         productRepository.save(product);
-        URI location;
         return new ResponseEntity<>("Toegevoegd", HttpStatus.CREATED);
     }
-//
-//    @RequestMapping(value="/admin/forms/upload",method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ModelAndView upload(@RequestParam CommonsMultipartFile file, HttpSession session){
-//        String path=session.getServletContext().getRealPath("/product_images/");
-//        String filename=file.getOriginalFilename();
-//
-//        System.out.println(path+" "+filename);
-//        try{
-//            byte barr[]=file.getBytes();
-//
-//            BufferedOutputStream bout=new BufferedOutputStream(
-//                    new FileOutputStream(path+"/"+filename));
-//            bout.write(barr);
-//            bout.flush();
-//            bout.close();
-//
-//        }catch(Exception e){System.out.println(e);}
-//        return new ModelAndView("upload-success","filename",path+"/"+filename);
-//    }
 
     @DeleteMapping("/admin/product/{id}")
     public ResponseEntity<Object> deleteProduct(@PathVariable("id") long id) {

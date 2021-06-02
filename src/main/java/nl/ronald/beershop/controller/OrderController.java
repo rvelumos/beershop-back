@@ -45,7 +45,6 @@ public class OrderController {
         order.setInvoiceStatus(UNPAID);
         order.setOrderStatus(NEW_ADDED);
         orderRepository.save(order);
-        //getJavaMailSender().send();
         return new ResponseEntity<>("Toegevoegd", HttpStatus.CREATED);
     }
 
@@ -59,7 +58,6 @@ public class OrderController {
                     updateOrder.setOrderDate(order.getOrderDate());
                     updateOrder.setOrderSent(order.getOrderSent());
                     updateOrder.setPriceTotal(order.getPriceTotal());
-
                     return orderRepository.save(updateOrder);
                 })
                 .orElseGet(() -> orderRepository.save(order));

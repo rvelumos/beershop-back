@@ -9,7 +9,6 @@ import java.util.List;
 
 public interface SearchTermsRepository extends JpaRepository<SearchTerms, Long> {
 
-    List<SearchTerms> findByKeyword(String keyword);
     @Query( value = "SELECT st.keyword as keywordName, sum(st.amount) AS keywordAmount\n " +
             "FROM  search_terms st " +
             "GROUP  BY st.keyword, st.amount\n " +

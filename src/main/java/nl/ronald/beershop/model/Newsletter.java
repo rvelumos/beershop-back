@@ -24,5 +24,4 @@ public class Newsletter {
 
     @Column
     private Date sent_date;
-
 }

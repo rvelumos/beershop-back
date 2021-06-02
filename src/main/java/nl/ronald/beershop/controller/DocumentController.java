@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-
 @RestController
 @RequestMapping("/api/v1/uploadfile")
 public class DocumentController {
@@ -26,8 +25,6 @@ public class DocumentController {
     @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = "multipart/form-data")
     public void addDocument(@RequestParam(value = "documents") MultipartFile[] multipartFiles)
             throws NoSuchAlgorithmException, IOException {
-        LOG.debug("Adding document >>>");
         documentService.addDocuments(multipartFiles);
-        LOG.debug("<<< Document added");
     }
 }

@@ -8,5 +8,4 @@ import java.util.List;
 public interface ShippingRepository extends JpaRepository<Shipping, Long> {
 
     List<Shipping> findAllById(Long id);
-
 }

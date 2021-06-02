@@ -13,5 +13,4 @@ public class NewsletterSubscriber {
 
     @Column
     private String email;
-
 }

@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +26,6 @@ public class ManufacturerController {
     @PostMapping(value="/manufacturer")
     public ResponseEntity<Object> createManufacturer(@RequestBody Manufacturer manufacturer) {
         manufacturerRepository.save(manufacturer);
-        URI location;
         return new ResponseEntity<>("Fabrikant toegevoegd", HttpStatus.CREATED);
     }
 
@@ -47,9 +45,7 @@ public class ManufacturerController {
                 updateManufacturer.setUser_id(manufacturer.getUser_id());
                 return manufacturerRepository.save(updateManufacturer);
             })
-            .orElseGet(() -> {
-                return manufacturerRepository.save(manufacturer);
-            });
+            .orElseGet(() -> manufacturerRepository.save(manufacturer));
     }
 
     @DeleteMapping("/admin/manufacturer/{id}")

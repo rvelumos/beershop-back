@@ -84,12 +84,9 @@ public class DiscountController {
                 .orElseGet(() -> discountRepository.save(discount));
     }
 
-    //auth fix!
     @DeleteMapping(value="/admin/products/discounts/{id}")
     public ResponseEntity<Object> deleteDiscount(@PathVariable("id") long id) {
         discountRepository.deleteById(id);
         return new ResponseEntity<>("Verwijderd", HttpStatus.OK);
     }
-
-
 }
