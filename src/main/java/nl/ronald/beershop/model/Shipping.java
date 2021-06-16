@@ -19,6 +19,9 @@ public class Shipping {
     @Column
     private String note;
 
+    @Column(name="shipping_carrier")
+    private String shippingCarrier;
+
     @OneToOne(mappedBy = "shipping")
     @JsonIgnore
     private Order order;
