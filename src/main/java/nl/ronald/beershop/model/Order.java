@@ -40,13 +40,6 @@ public class Order {
     @Column(name="customer_id")
     private long customerId;
 
-//    @ManyToMany
-//    @JoinTable(
-//            name = "orders_product",
-//            joinColumns = @JoinColumn(name = "order_id"),
-//            inverseJoinColumns = @JoinColumn(name = "product_id"))
-//    Set<Product> productOrders;
-
     @JsonFormat(pattern="dd-MM-yyyy")
     @Column(name="order_date")
     private Date orderDate;
